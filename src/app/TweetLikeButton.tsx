@@ -17,7 +17,10 @@ const TweetLikeButton = ({ author, id }: TweetLikeButtonProps) => {
     likeTweet(author, id);
   }, [author, id, likeTweet]);
   return (
-    <button onClick={onClick}>
+    <button
+      onClick={onClick}
+      // className="animate-pulse"
+    >
       <Heart />
     </button>
   );
