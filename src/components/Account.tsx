@@ -7,7 +7,7 @@ import { shortedAccountAddress } from "@/lib/utils";
 const Account = () => {
   const { address, isConnected } = useAccount();
   return (
-    <div className="border flex flex-col items-center gap-3">
+    <div className=" flex flex-col items-center gap-3">
       <ConnectWallet />
       <div className="flex gap-2">
         Account:

@@ -2,6 +2,7 @@
 import { useGetTweets } from "@/hooks/useGetTweets";
 import useLikeTweet from "@/hooks/useLikeTweet";
 import { useQueryClient } from "@tanstack/react-query";
+import clsx from "clsx";
 import { Heart } from "lucide-react";
 import React, { useCallback, useEffect } from "react";
 
@@ -19,9 +20,13 @@ const TweetLikeButton = ({ author, id }: TweetLikeButtonProps) => {
   return (
     <button
       onClick={onClick}
-      // className="animate-pulse"
+      className={clsx(
+        "hover:text-red-600 transition-all",
+        isConfirming ? "text-gray-400 animate-pulse pointer-events-none" : ""
+      )}
+      disabled={isConfirming}
     >
-      <Heart />
+      <Heart className="w-5" />
     </button>
   );
 };
