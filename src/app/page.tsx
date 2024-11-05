@@ -1,5 +1,4 @@
-// TODO: ask user to connect before any interaction, add an text area to create tweets
-// fixme: MULTIPLE RERENDERS WHEN LIKING A TWEET
+// TODO: add an text area to create tweets, add disline button
 import Account from "@/components/Account";
 import Tweets from "@/components/Tweets";
 import { Toaster } from "react-hot-toast";

@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
 import { Button } from "./ui/button";
+import toast from "react-hot-toast";
 
 const ConnectWallet = () => {
   const { isConnected } = useAccount();
@@ -32,7 +33,14 @@ type ConnectorButtonProps = {
 
 const ConnectorButton = ({ name }: ConnectorButtonProps) => {
   const { connectors, connect, error } = useConnect();
-
+  useEffect(() => {
+    if (!error) return;
+    const shortErrorMessage = error.message.split("\n")[0];
+    toast.error(shortErrorMessage, {
+      position: "bottom-right",
+      duration: 5000,
+    });
+  }, [error]);
   return (
     <>
       {connectors
@@ -46,7 +54,6 @@ const ConnectorButton = ({ name }: ConnectorButtonProps) => {
             {connector.name}
           </Button>
         ))}
-      <p className="text-red-600 text-sm">{error?.message}</p>
     </>
   );
 };
