@@ -1,7 +1,13 @@
-// TODO: add an text area to create tweets, add disline button
-import Account from "@/components/Account";
-import Tweets from "@/components/Tweets";
+/**
+ TODO: 
+ create tweetcard skeletons, 
+ add an text area to create tweets, 
+ add disline button, 
+ make chain selection based on environment variables
+*/
+import Tweets from "@/app/(root)/_components/Tweets";
 import { Toaster } from "react-hot-toast";
+import Account from "./_components/Account";
 
 function App() {
   return (

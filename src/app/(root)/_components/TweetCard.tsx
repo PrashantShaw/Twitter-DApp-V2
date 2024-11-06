@@ -2,7 +2,7 @@ import { Tweet } from "@/utils/definitions";
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { formatDateTime, shortedAccountAddress } from "@/lib/utils";
-import TweetLikeButton from "@/app/TweetLikeButton";
+import TweetLikeButton from "@/app/(root)/_components/TweetLikeButton";
 
 type TweetCardProps = {
   tweet: Tweet;

@@ -1,7 +1,7 @@
 import React, { useEffect } from "react";
 import { useAccount, useConnect, useDisconnect } from "wagmi";
-import { Button } from "./ui/button";
 import toast from "react-hot-toast";
+import { Button } from "@/components/ui/button";
 
 const ConnectWallet = () => {
   const { isConnected } = useAccount();

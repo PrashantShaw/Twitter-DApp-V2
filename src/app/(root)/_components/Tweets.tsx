@@ -1,5 +1,4 @@
 "use client";
-import TweetLikeButton from "@/app/TweetLikeButton";
 import { useGetTweets } from "@/hooks/useGetTweets";
 import React from "react";
 import TweetCard from "./TweetCard";

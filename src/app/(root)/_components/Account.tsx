@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { Connector, useAccount, useConnect, useDisconnect } from "wagmi";
-import ConnectWallet from "./ConnectWallet";
+import ConnectWallet from "@/components/common/ConnectWallet";
 import { shortedAccountAddress } from "@/lib/utils";
 
 const Account = () => {
