@@ -1,19 +1,19 @@
 "use client";
-import useLikeTweet from "@/hooks/useLikeTweet";
+import useUnlikeTweet from "@/hooks/useUnlikeTweet";
 import clsx from "clsx";
-import { Heart } from "lucide-react";
+import { Heart, ThumbsDown } from "lucide-react";
 import React, { useCallback } from "react";
 
-type TweetLikeButtonProps = {
+type TweetUnlikeButtonProps = {
   author: `0x${string}`;
   id: string;
 };
-const TweetLikeButton = ({ author, id }: TweetLikeButtonProps) => {
-  const { isTriggeringWrite, isConfirming, likeTweet } = useLikeTweet();
+const TweetUnlikeButton = ({ author, id }: TweetUnlikeButtonProps) => {
+  const { isTriggeringWrite, isConfirming, unlikeTweet } = useUnlikeTweet();
 
   const onClick = useCallback(() => {
-    likeTweet(author, id);
-  }, [author, id, likeTweet]);
+    unlikeTweet(author, id);
+  }, [author, id, unlikeTweet]);
   const isDisabled = isTriggeringWrite || isConfirming;
   return (
     <button
@@ -24,9 +24,9 @@ const TweetLikeButton = ({ author, id }: TweetLikeButtonProps) => {
       )}
       disabled={isDisabled}
     >
-      <Heart className="w-5" />
+      <ThumbsDown className="w-5" />
     </button>
   );
 };
 
-export default TweetLikeButton;
+export default TweetUnlikeButton;

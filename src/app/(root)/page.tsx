@@ -1,8 +1,8 @@
 /**
  TODO: 
- create tweetcard skeletons, 
+ create tweetcard skeletons, ✅
  add an text area to create tweets, 
- add disline button, 
+ add disline button, ✅
  make chain selection based on environment variables
 */
 import Tweets from "@/app/(root)/_components/Tweets";

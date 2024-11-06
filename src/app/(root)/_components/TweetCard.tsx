@@ -3,6 +3,8 @@ import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { formatDateTime, shortedAccountAddress } from "@/lib/utils";
 import TweetLikeButton from "@/app/(root)/_components/TweetLikeButton";
+import { ThumbsDown } from "lucide-react";
+import TweetUnlikeButton from "./TweetUnlikeButton";
 
 type TweetCardProps = {
   tweet: Tweet;
@@ -24,8 +26,9 @@ const TweetCard = ({ tweet }: TweetCardProps) => {
           <p className="">{tweet.content}</p>
           <div className="flex justify-between pt-3 items-center ">
             <div className="flex items-center gap-2 ">
-              <p className="text-xl">{tweet.likes}</p>
               <TweetLikeButton author={tweet.author} id={tweet.id} />
+              <p className="text-xl">{tweet.likes}</p>
+              <TweetUnlikeButton author={tweet.author} id={tweet.id} />
             </div>
             <p className="text-right text-gray-300 text-sm">
               {formatDateTime(tweet.timestamp)}
