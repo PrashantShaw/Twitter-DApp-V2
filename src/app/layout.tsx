@@ -13,6 +13,9 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Twitter Wagmi DApp",
   description: "Twitter Wagmi DApp",
+  icons: {
+    icon: "/twitter.png",
+  },
 };
 
 export default function RootLayout(props: { children: ReactNode }) {

@@ -11,21 +11,21 @@ import {
 import { useGetTweets } from "./useGetTweets";
 import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { sepolia } from "viem/chains";
 import { injected } from "wagmi/connectors";
+import { getEthNetworkId } from "@/lib/utils";
 
 const useUnlikeTweet = () => {
   const [isNotified, setIsNotified] = useState(false);
   const { isConnected } = useAccount();
   const { connectAsync } = useConnect();
   const queryClient = useQueryClient();
+  const { queryKey } = useGetTweets();
   const {
     writeContract,
     data: hash,
     error,
     isPending: isTriggeringWrite,
   } = useWriteContract();
-  const { queryKey } = useGetTweets();
   const {
     isLoading: isConfirming,
     isSuccess: isConfirmed,
@@ -59,7 +59,7 @@ const useUnlikeTweet = () => {
       try {
         if (!isConnected) {
           await connectAsync({
-            chainId: sepolia.id,
+            chainId: getEthNetworkId(),
             connector: injected(),
           });
         }

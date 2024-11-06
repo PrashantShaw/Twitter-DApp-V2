@@ -1,7 +1,6 @@
-"use client";
-
-import { TWITTER_CONTRACT_CONFIG } from "@/utils/constants";
+import { useQueryClient } from "@tanstack/react-query";
 import { useCallback, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import {
   useAccount,
   useConnect,
@@ -9,23 +8,22 @@ import {
   useWriteContract,
 } from "wagmi";
 import { useGetTweets } from "./useGetTweets";
-import { useQueryClient } from "@tanstack/react-query";
-import toast from "react-hot-toast";
-import { injected } from "wagmi/connectors";
+import { TWITTER_CONTRACT_CONFIG } from "@/utils/constants";
 import { getEthNetworkId } from "@/lib/utils";
+import { injected } from "wagmi/connectors";
 
-const useLikeTweet = () => {
+const useCreateTweet = () => {
   const [isNotified, setIsNotified] = useState(false);
   const { isConnected } = useAccount();
   const { connectAsync } = useConnect();
   const queryClient = useQueryClient();
+  const { queryKey } = useGetTweets();
   const {
-    writeContract,
     data: hash,
     error,
     isPending: isTriggeringWrite,
+    writeContract,
   } = useWriteContract();
-  const { queryKey } = useGetTweets();
   const {
     isLoading: isConfirming,
     isSuccess: isConfirmed,
@@ -33,6 +31,7 @@ const useLikeTweet = () => {
   } = useWaitForTransactionReceipt({
     hash,
   });
+
   useEffect(() => {
     if (!error) return;
     const shortErrorMessage = error.message.split("\n")[0];
@@ -46,7 +45,7 @@ const useLikeTweet = () => {
   useEffect(() => {
     if (isConfirmed && !isNotified) {
       queryClient.invalidateQueries({ queryKey });
-      toast.success("Tweet Liked!", {
+      toast.success("Tweet Created!", {
         position: "bottom-center",
         duration: 3000,
       });
@@ -54,8 +53,8 @@ const useLikeTweet = () => {
     }
   }, [hash, isConfirmed, isConfirming, queryClient, queryKey, isNotified]);
 
-  const likeTweet = useCallback(
-    async (author: `0x${string}`, id: string) => {
+  const createTweet = useCallback(
+    async (tweet: string) => {
       try {
         if (!isConnected) {
           await connectAsync({
@@ -66,8 +65,8 @@ const useLikeTweet = () => {
         writeContract({
           address: TWITTER_CONTRACT_CONFIG.address,
           abi: TWITTER_CONTRACT_CONFIG.abi,
-          functionName: "likeTweet",
-          args: [author, BigInt(id)],
+          functionName: "createTweet",
+          args: [tweet],
         });
       } catch (error: any) {
         const shortErrorMessage = error.message.split("\n")[0];
@@ -80,8 +79,9 @@ const useLikeTweet = () => {
     },
     [writeContract, connectAsync, isConnected]
   );
+
   return {
-    likeTweet,
+    createTweet,
     hash,
     data,
     isConfirming,
@@ -90,4 +90,4 @@ const useLikeTweet = () => {
   };
 };
 
-export default useLikeTweet;
+export default useCreateTweet;

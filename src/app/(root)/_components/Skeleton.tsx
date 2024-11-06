@@ -1,15 +1,7 @@
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import React from "react";
 
-type SkeletonProps = {
-  children: React.ReactNode;
-};
-
-const Skeleton = ({ children }: SkeletonProps) => {
-  return <div>{children}</div>;
-};
-
-Skeleton.TweetCard = () => {
+export const SkeletonTweetCard = () => {
   return (
     <div className="border rounded-md p-4 animate-pulse">
       <div className="flex gap-4">
@@ -33,5 +25,3 @@ Skeleton.TweetCard = () => {
     </div>
   );
 };
-
-export default Skeleton;

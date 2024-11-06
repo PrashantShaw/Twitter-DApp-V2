@@ -7,13 +7,14 @@ const SEPOLIA_INFURA_RPC_ENDPOINT = `https://sepolia.infura.io/v3/${INFURA_API_K
 
 export function getConfig() {
   return createConfig({
-    chains: [sepolia],
+    chains: [sepolia, mainnet],
     connectors: [injected()],
     storage: createStorage({
       storage: cookieStorage,
     }),
     ssr: true,
     transports: {
+      [mainnet.id]: http(),
       [sepolia.id]: http(SEPOLIA_INFURA_RPC_ENDPOINT),
     },
   });

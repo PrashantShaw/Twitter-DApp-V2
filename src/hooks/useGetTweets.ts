@@ -1,9 +1,9 @@
 "use client";
 import { TWITTER_ABI } from "@/abi/TwitterAbi";
+import { getEthNetworkId } from "@/lib/utils";
 import { TWITTER_CONTRACT_ADDRESS } from "@/utils/constants";
 import { Tweet } from "@/utils/definitions";
 import { useMemo } from "react";
-import { sepolia } from "viem/chains";
 import { useReadContract } from "wagmi";
 
 export const useGetTweets = () => {
@@ -16,7 +16,7 @@ export const useGetTweets = () => {
     address: TWITTER_CONTRACT_ADDRESS,
     abi: TWITTER_ABI,
     functionName: "getAllTweets",
-    chainId: sepolia.id,
+    chainId: getEthNetworkId(),
   });
   console.log("useGetTweets hook called", rawTweets);
   type RawTweet =

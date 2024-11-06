@@ -1,6 +1,12 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { mainnet, sepolia } from "viem/chains";
 
+const ETH_NETWORK_IDS = {
+  sepolia: sepolia.id,
+  mainnet: mainnet.id,
+};
+type ETH_NETWORKS = keyof typeof ETH_NETWORK_IDS;
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
@@ -18,4 +24,11 @@ export const formatDateTime = (datetime: Date) => {
     minute: "2-digit",
     second: "2-digit",
   });
+};
+
+export const getEthNetworkId = () => {
+  const ETH_NETWORK =
+    (process.env.NEXT_PUBLIC_ETH_NETWORK as ETH_NETWORKS) || "sepolia";
+
+  return ETH_NETWORK_IDS[ETH_NETWORK];
 };

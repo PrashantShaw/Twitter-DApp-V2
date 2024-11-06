@@ -2,13 +2,13 @@
 import { useGetTweets } from "@/hooks/useGetTweets";
 import React from "react";
 import TweetCard from "./TweetCard";
-import Skeleton from "./Skeleton";
+import { SkeletonTweetCard } from "./Skeleton";
 
 const Tweets = () => {
   const { tweets, isPending, error: fetchTweetsError } = useGetTweets();
 
   return (
-    <div className="flex flex-col gap-3 p-4">
+    <div className="flex flex-col gap-3 py-8">
       {fetchTweetsError ? (
         <p className="text-red-600 text-sm">
           Error: {fetchTweetsError.message}
@@ -16,9 +16,9 @@ const Tweets = () => {
       ) : null}
       {isPending ? (
         <>
-          <Skeleton.TweetCard />
-          <Skeleton.TweetCard />
-          <Skeleton.TweetCard />
+          <SkeletonTweetCard />
+          <SkeletonTweetCard />
+          <SkeletonTweetCard />
         </>
       ) : (
         tweets?.map((tweet) => <TweetCard key={tweet.id} tweet={tweet} />)

@@ -19,7 +19,7 @@ const TweetUnlikeButton = ({ author, id }: TweetUnlikeButtonProps) => {
     <button
       onClick={onClick}
       className={clsx(
-        "hover:text-red-600 transition-all",
+        "hover:text-violet-600 transition-all",
         isDisabled ? "text-gray-400 animate-pulse pointer-events-none" : ""
       )}
       disabled={isDisabled}
