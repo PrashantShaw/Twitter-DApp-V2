@@ -17,13 +17,8 @@ const useSetCorrectChain = () => {
     console.log("selectedChainId:", selectedChainId);
     console.log("requiredChainId:", requiredChainId);
     try {
-      // TODO: remove logs
       if (isConnected && !isCorrectChain) {
-        console.log(
-          "inside useSetCorrectChain hook ####################################"
-        );
-        const data = await switchChainAsync({ chainId: requiredChainId });
-        // data.id;
+        await switchChainAsync({ chainId: requiredChainId });
         toast.success("Chain Switched!", {
           position: "bottom-right",
           duration: 3000,

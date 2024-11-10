@@ -12,6 +12,8 @@ const Navbar = () => {
                 className="h-8 w-auto"
                 src="/twitter.png"
                 alt="Your Company"
+                width={64}
+                height={64}
               />
               <span className="text-white font-bold pl-4 text-lg hidden sm:block">
                 TWDApp

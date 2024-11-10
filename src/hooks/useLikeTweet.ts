@@ -2,17 +2,22 @@
 
 import { TWITTER_CONTRACT_CONFIG } from "@/utils/constants";
 import { useCallback, useEffect, useState } from "react";
-import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
+import {
+  useAccount,
+  useWaitForTransactionReceipt,
+  useWriteContract,
+} from "wagmi";
 import { useGetTweets } from "./useGetTweets";
 import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import useConnectToWallet from "./useConnectToWallet";
-import useSetCorrectChain from "./useSetCorrectChain";
+import { getEthNetworkId } from "@/lib/utils";
 
 const useLikeTweet = () => {
   const [isNotified, setIsNotified] = useState(false);
-  const { connectToWallet } = useConnectToWallet();
-  const { setCorrectChain } = useSetCorrectChain();
+  const { isConnected, chainId: selectedChainId } = useAccount();
+  const requiredChainId = getEthNetworkId();
+  const isCorrectChain = selectedChainId === requiredChainId;
+
   const queryClient = useQueryClient();
   const {
     writeContract,
@@ -51,21 +56,30 @@ const useLikeTweet = () => {
 
   const likeTweet = useCallback(
     async (author: `0x${string}`, id: string) => {
-      const isConnected = await connectToWallet();
-      const isCorrectChain = await setCorrectChain();
-
-      // TODO: check if wallet is connected and correct chain before calling the contract (look inside NavbarActions.tsx)
-      if (isConnected && isCorrectChain) {
-        writeContract({
-          address: TWITTER_CONTRACT_CONFIG.address,
-          abi: TWITTER_CONTRACT_CONFIG.abi,
-          functionName: "likeTweet",
-          args: [author, BigInt(id)],
+      if (!isConnected) {
+        toast.error("Wallet not connected", {
+          position: "bottom-right",
+          duration: 5000,
         });
+        return;
       }
+      if (!isCorrectChain) {
+        toast.error("Switch chain to sepolia", {
+          position: "bottom-right",
+          duration: 5000,
+        });
+        return;
+      }
+
+      writeContract({
+        address: TWITTER_CONTRACT_CONFIG.address,
+        abi: TWITTER_CONTRACT_CONFIG.abi,
+        functionName: "likeTweet",
+        args: [author, BigInt(id)],
+      });
       setIsNotified(false);
     },
-    [writeContract, connectToWallet, setCorrectChain]
+    [isConnected, isCorrectChain, writeContract]
   );
   return {
     likeTweet,

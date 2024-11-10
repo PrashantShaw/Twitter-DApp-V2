@@ -17,7 +17,11 @@ const NavbarActions = () => {
           </div>
         </>
       ) : (
-        <ConnectorButton name="MetaMask" label="Connect Wallet" />
+        <ConnectorButton
+          name="MetaMask"
+          label="Connect Wallet"
+          iconUrl="/metamask-icon.webp"
+        />
       )}
     </div>
   );
