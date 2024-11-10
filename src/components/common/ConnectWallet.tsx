@@ -29,9 +29,10 @@ export default ConnectWallet;
 
 type ConnectorButtonProps = {
   name: "MetaMask";
+  label?: string;
 };
 
-const ConnectorButton = ({ name }: ConnectorButtonProps) => {
+export const ConnectorButton = ({ name, label }: ConnectorButtonProps) => {
   const { connectors, connect, error } = useConnect();
   useEffect(() => {
     if (!error) return;
@@ -51,7 +52,7 @@ const ConnectorButton = ({ name }: ConnectorButtonProps) => {
             key={connector.uid}
             onClick={() => connect({ connector })}
           >
-            {connector.name}
+            {label ?? connector.name}
           </Button>
         ))}
     </>

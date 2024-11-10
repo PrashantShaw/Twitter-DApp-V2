@@ -9,7 +9,9 @@ type TweetLikeButtonProps = {
   id: string;
 };
 const TweetLikeButton = ({ author, id }: TweetLikeButtonProps) => {
-  const { isTriggeringWrite, isConfirming, likeTweet } = useLikeTweet();
+  // TODO: remove logs
+  const { hash, isTriggeringWrite, isConfirming, likeTweet } = useLikeTweet();
+  console.log(isTriggeringWrite, isConfirming, hash, "##");
 
   const onClick = useCallback(() => {
     likeTweet(author, id);

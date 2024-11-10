@@ -2,22 +2,17 @@
 
 import { TWITTER_CONTRACT_CONFIG } from "@/utils/constants";
 import { useCallback, useEffect, useState } from "react";
-import {
-  useAccount,
-  useConnect,
-  useWaitForTransactionReceipt,
-  useWriteContract,
-} from "wagmi";
+import { useWaitForTransactionReceipt, useWriteContract } from "wagmi";
 import { useGetTweets } from "./useGetTweets";
 import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { injected } from "wagmi/connectors";
-import { getEthNetworkId } from "@/lib/utils";
+import useConnectToWallet from "./useConnectToWallet";
+import useSetCorrectChain from "./useSetCorrectChain";
 
 const useLikeTweet = () => {
   const [isNotified, setIsNotified] = useState(false);
-  const { isConnected } = useAccount();
-  const { connectAsync } = useConnect();
+  const { connectToWallet } = useConnectToWallet();
+  const { setCorrectChain } = useSetCorrectChain();
   const queryClient = useQueryClient();
   const {
     writeContract,
@@ -52,33 +47,25 @@ const useLikeTweet = () => {
       });
       setIsNotified(true);
     }
-  }, [hash, isConfirmed, isConfirming, queryClient, queryKey, isNotified]);
+  }, [isConfirmed, queryClient, queryKey, isNotified]);
 
   const likeTweet = useCallback(
     async (author: `0x${string}`, id: string) => {
-      try {
-        if (!isConnected) {
-          await connectAsync({
-            chainId: getEthNetworkId(),
-            connector: injected(),
-          });
-        }
+      const isConnected = await connectToWallet();
+      const isCorrectChain = await setCorrectChain();
+
+      // TODO: check if wallet is connected and correct chain before calling the contract (look inside NavbarActions.tsx)
+      if (isConnected && isCorrectChain) {
         writeContract({
           address: TWITTER_CONTRACT_CONFIG.address,
           abi: TWITTER_CONTRACT_CONFIG.abi,
           functionName: "likeTweet",
           args: [author, BigInt(id)],
         });
-      } catch (error: any) {
-        const shortErrorMessage = error.message.split("\n")[0];
-        toast.error(shortErrorMessage, {
-          position: "bottom-right",
-          duration: 5000,
-        });
       }
       setIsNotified(false);
     },
-    [writeContract, connectAsync, isConnected]
+    [writeContract, connectToWallet, setCorrectChain]
   );
   return {
     likeTweet,
