@@ -1,7 +1,7 @@
 /**
  TODO: 
  2. add switch account btn beside disconnect button (when connected)
- 3. add same pattern of useLikeTweet.ts to all other hooks
+ 4. move getAllTweets queryKey to local storage
 */
 import Tweets from "@/app/(root)/_components/Tweets";
 import { Toaster } from "react-hot-toast";

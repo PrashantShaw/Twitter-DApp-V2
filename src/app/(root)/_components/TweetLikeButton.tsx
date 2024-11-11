@@ -9,20 +9,20 @@ type TweetLikeButtonProps = {
   id: string;
 };
 const TweetLikeButton = ({ author, id }: TweetLikeButtonProps) => {
-  const { isTriggeringWrite, isConfirming, likeTweet } = useLikeTweet();
+  const { isPending, likeTweet } = useLikeTweet();
 
   const onClick = useCallback(() => {
     likeTweet(author, id);
   }, [author, id, likeTweet]);
-  const isDisabled = isTriggeringWrite || isConfirming;
+
   return (
     <button
       onClick={onClick}
       className={clsx(
         "hover:text-red-600 transition-all",
-        isDisabled ? "text-gray-400 animate-pulse pointer-events-none" : ""
+        isPending ? "text-gray-400 animate-pulse pointer-events-none" : ""
       )}
-      disabled={isDisabled}
+      disabled={isPending}
     >
       <Heart className="w-5" />
     </button>

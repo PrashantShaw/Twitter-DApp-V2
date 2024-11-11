@@ -1,58 +1,25 @@
 "use client";
 
 import { TWITTER_CONTRACT_CONFIG } from "@/utils/constants";
-import { useCallback, useEffect, useState } from "react";
-import {
-  useAccount,
-  useWaitForTransactionReceipt,
-  useWriteContract,
-} from "wagmi";
+import { useCallback, useState } from "react";
+import { useAccount, useWriteContract } from "wagmi";
 import { useGetTweets } from "./useGetTweets";
 import { useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { getEthNetworkId } from "@/lib/utils";
+import { waitForTransactionReceipt } from "@wagmi/core";
+import { type WriteContractErrorType } from "@wagmi/core";
+import { type WaitForTransactionReceiptErrorType } from "@wagmi/core";
+import { getConfig } from "@/wagmi";
 
 const useLikeTweet = () => {
-  const [isNotified, setIsNotified] = useState(false);
+  const [isPending, setIsPending] = useState(false);
   const { isConnected, chainId: selectedChainId } = useAccount();
   const requiredChainId = getEthNetworkId();
   const isCorrectChain = selectedChainId === requiredChainId;
-
-  const queryClient = useQueryClient();
-  const {
-    writeContract,
-    data: hash,
-    error,
-    isPending: isTriggeringWrite,
-  } = useWriteContract();
   const { queryKey } = useGetTweets();
-  const {
-    isLoading: isConfirming,
-    isSuccess: isConfirmed,
-    data,
-  } = useWaitForTransactionReceipt({
-    hash,
-  });
-  useEffect(() => {
-    if (!error) return;
-    const shortErrorMessage = error.message.split("\n")[0];
-    toast.error(shortErrorMessage, {
-      position: "bottom-right",
-      duration: 5000,
-    });
-    setIsNotified(true);
-  }, [error]);
-
-  useEffect(() => {
-    if (isConfirmed && !isNotified) {
-      queryClient.invalidateQueries({ queryKey });
-      toast.success("Tweet Liked!", {
-        position: "bottom-center",
-        duration: 3000,
-      });
-      setIsNotified(true);
-    }
-  }, [isConfirmed, queryClient, queryKey, isNotified]);
+  const queryClient = useQueryClient();
+  const { writeContractAsync } = useWriteContract();
 
   const likeTweet = useCallback(
     async (author: `0x${string}`, id: string) => {
@@ -71,23 +38,51 @@ const useLikeTweet = () => {
         return;
       }
 
-      writeContract({
-        address: TWITTER_CONTRACT_CONFIG.address,
-        abi: TWITTER_CONTRACT_CONFIG.abi,
-        functionName: "likeTweet",
-        args: [author, BigInt(id)],
-      });
-      setIsNotified(false);
+      setIsPending(true);
+      try {
+        const hash = await writeContractAsync({
+          address: TWITTER_CONTRACT_CONFIG.address,
+          abi: TWITTER_CONTRACT_CONFIG.abi,
+          functionName: "likeTweet",
+          args: [author, BigInt(id)],
+          chainId: requiredChainId,
+        });
+        await waitForTransactionReceipt(getConfig(), {
+          hash,
+          chainId: requiredChainId,
+        });
+        // optionally, u can fetch event which is emitted when tweet is liked using 'useWatchContractEvent' hook
+        queryClient.invalidateQueries({ queryKey });
+        toast.success("Tweet Liked!", {
+          position: "bottom-center",
+          duration: 3000,
+        });
+      } catch (error: unknown) {
+        const typedError = error as
+          | WriteContractErrorType
+          | WaitForTransactionReceiptErrorType
+          | Error;
+        const shortErrorMessage = typedError.message.split("\n")[0];
+        toast.error(shortErrorMessage, {
+          position: "bottom-right",
+          duration: 5000,
+        });
+      } finally {
+        setIsPending(false);
+      }
     },
-    [isConnected, isCorrectChain, writeContract]
+    [
+      isConnected,
+      isCorrectChain,
+      writeContractAsync,
+      queryClient,
+      queryKey,
+      requiredChainId,
+    ]
   );
   return {
     likeTweet,
-    hash,
-    data,
-    isConfirming,
-    isConfirmed,
-    isTriggeringWrite,
+    isPending,
   };
 };
 

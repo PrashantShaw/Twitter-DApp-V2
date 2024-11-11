@@ -1,7 +1,7 @@
 "use client";
 import useUnlikeTweet from "@/hooks/useUnlikeTweet";
 import clsx from "clsx";
-import { Heart, ThumbsDown } from "lucide-react";
+import { ThumbsDown } from "lucide-react";
 import React, { useCallback } from "react";
 
 type TweetUnlikeButtonProps = {
@@ -9,20 +9,19 @@ type TweetUnlikeButtonProps = {
   id: string;
 };
 const TweetUnlikeButton = ({ author, id }: TweetUnlikeButtonProps) => {
-  const { isTriggeringWrite, isConfirming, unlikeTweet } = useUnlikeTweet();
+  const { isPending, unlikeTweet } = useUnlikeTweet();
 
   const onClick = useCallback(() => {
     unlikeTweet(author, id);
   }, [author, id, unlikeTweet]);
-  const isDisabled = isTriggeringWrite || isConfirming;
   return (
     <button
       onClick={onClick}
       className={clsx(
         "hover:text-violet-600 transition-all",
-        isDisabled ? "text-gray-400 animate-pulse pointer-events-none" : ""
+        isPending ? "text-gray-400 animate-pulse pointer-events-none" : ""
       )}
-      disabled={isDisabled}
+      disabled={isPending}
     >
       <ThumbsDown className="w-5" />
     </button>
