@@ -1,22 +1,25 @@
 "use client";
-import { TWITTER_CONTRACT_CONFIG } from "@/utils/constants";
+import {
+  QUERY_KEYS_FROM_LOCALSTORAGE,
+  TWITTER_CONTRACT_CONFIG,
+} from "@/utils/constants";
 import { useCallback, useState } from "react";
 import { useAccount, useWriteContract } from "wagmi";
-import { useGetTweets } from "./useGetTweets";
-import { useQueryClient } from "@tanstack/react-query";
+import { QueryKey, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { getEthNetworkId } from "@/lib/utils";
 import { waitForTransactionReceipt } from "@wagmi/core";
 import { type WriteContractErrorType } from "@wagmi/core";
 import { type WaitForTransactionReceiptErrorType } from "@wagmi/core";
 import { getConfig } from "@/wagmi";
+import useLocalStorage from "./useLocalStorage";
 
 const useCreateTweet = () => {
   const [isPending, setIsPending] = useState(false);
   const { isConnected, chainId: selectedChainId } = useAccount();
   const requiredChainId = getEthNetworkId();
   const isCorrectChain = selectedChainId === requiredChainId;
-  const { queryKey } = useGetTweets();
+  const { getItem } = useLocalStorage();
   const queryClient = useQueryClient();
   const { writeContractAsync } = useWriteContract();
 
@@ -52,8 +55,11 @@ const useCreateTweet = () => {
           hash,
           chainId: requiredChainId,
         });
+        const getAllTweetsQueryKey: QueryKey | undefined = getItem(
+          QUERY_KEYS_FROM_LOCALSTORAGE.getAllTweets
+        );
+        queryClient.invalidateQueries({ queryKey: getAllTweetsQueryKey });
         // optionally, u can fetch event which is emitted when tweet is created using 'useWatchContractEvent' hook
-        queryClient.invalidateQueries({ queryKey });
         success = true;
         toast.success("Tweet Created!", {
           position: "bottom-center",
@@ -76,11 +82,11 @@ const useCreateTweet = () => {
       return { success };
     },
     [
+      getItem,
       isConnected,
       isCorrectChain,
       writeContractAsync,
       queryClient,
-      queryKey,
       requiredChainId,
     ]
   );

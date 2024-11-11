@@ -1,10 +1,14 @@
 "use client";
 import { TWITTER_ABI } from "@/abi/TwitterAbi";
 import { getEthNetworkId } from "@/lib/utils";
-import { TWITTER_CONTRACT_ADDRESS } from "@/utils/constants";
+import {
+  QUERY_KEYS_FROM_LOCALSTORAGE,
+  TWITTER_CONTRACT_ADDRESS,
+} from "@/utils/constants";
 import { Tweet } from "@/utils/definitions";
 import { useCallback, useMemo } from "react";
 import { useReadContract } from "wagmi";
+import useLocalStorage from "./useLocalStorage";
 
 export const useGetTweets = () => {
   const {
@@ -18,6 +22,7 @@ export const useGetTweets = () => {
     functionName: "getAllTweets",
     chainId: getEthNetworkId(),
   });
+  const { setItem } = useLocalStorage();
   console.log("useGetTweets hook called", rawTweets);
   type RawTweet =
     Exclude<typeof rawTweets, undefined> extends readonly (infer U)[]
@@ -37,7 +42,7 @@ export const useGetTweets = () => {
   const tweets = useMemo(() => {
     if (!rawTweets) return [];
 
-    return rawTweets.reduce((acc: Tweet[], tweet: RawTweet) => {
+    const newTweetsFirst = rawTweets.reduce((acc: Tweet[], tweet: RawTweet) => {
       const parsedTweet = parseTweet(tweet);
       const insertIndex = acc.findIndex(
         (t) => t.timestamp.getTime() < parsedTweet.timestamp.getTime()
@@ -49,6 +54,9 @@ export const useGetTweets = () => {
 
       return acc;
     }, []);
-  }, [rawTweets, parseTweet]);
+
+    setItem(QUERY_KEYS_FROM_LOCALSTORAGE.getAllTweets, queryKey);
+    return newTweetsFirst;
+  }, [rawTweets, parseTweet, queryKey, setItem]);
   return { tweets, isPending, error, queryKey };
 };

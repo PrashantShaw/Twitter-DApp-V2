@@ -7,3 +7,7 @@ export const TWITTER_CONTRACT_CONFIG = {
   address: TWITTER_CONTRACT_ADDRESS,
   abi: TWITTER_ABI,
 };
+
+export const QUERY_KEYS_FROM_LOCALSTORAGE = {
+  getAllTweets: "queryKey__getAllTweets",
+} as const;

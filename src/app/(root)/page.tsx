@@ -1,7 +1,6 @@
 /**
  TODO: 
  2. add switch account btn beside disconnect button (when connected)
- 4. move getAllTweets queryKey to local storage
 */
 import Tweets from "@/app/(root)/_components/Tweets";
 import { Toaster } from "react-hot-toast";
