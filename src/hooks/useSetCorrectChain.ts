@@ -1,4 +1,4 @@
-import { getEthNetworkId } from "@/lib/utils";
+import { getRequiredEthChain } from "@/lib/utils";
 import { useCallback } from "react";
 import toast from "react-hot-toast";
 import { useAccount, useSwitchChain } from "wagmi";
@@ -8,7 +8,7 @@ import { getConfig } from "@/wagmi";
 const useSetCorrectChain = () => {
   const { isConnected } = useAccount();
   const { switchChainAsync } = useSwitchChain();
-  const requiredChainId = getEthNetworkId();
+  const { id: requiredChainId } = getRequiredEthChain();
 
   const setCorrectChain = useCallback(async () => {
     const config = getConfig();

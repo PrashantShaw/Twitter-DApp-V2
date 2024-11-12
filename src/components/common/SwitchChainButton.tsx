@@ -1,26 +1,25 @@
 "use client";
-import { getEthNetworkId } from "@/lib/utils";
+import { getRequiredEthChain } from "@/lib/utils";
 import { Button } from "../ui/button";
 import { ArrowDownUp, CheckCheck } from "lucide-react";
 import { useAccount, useSwitchChain } from "wagmi";
 
-// TODO: store required network name along with the required chain ID
 const SwitchChainButton = () => {
   const { chainId: selectedChainId } = useAccount();
   const { switchChain } = useSwitchChain();
-  const requiredChainId = getEthNetworkId();
+  const requiredChain = getRequiredEthChain();
 
   return (
     <div className="">
-      {selectedChainId === requiredChainId ? (
+      {selectedChainId === requiredChain.id ? (
         <Button>
           <CheckCheck className="text-green-600" strokeWidth={3} />
-          Sepolia
+          {requiredChain.name}
         </Button>
       ) : (
-        <Button onClick={() => switchChain({ chainId: requiredChainId })}>
+        <Button onClick={() => switchChain({ chainId: requiredChain.id })}>
           <ArrowDownUp className="text-amber-400" />
-          Switch to Sepolia
+          Switch to {requiredChain.name}
         </Button>
       )}
     </div>

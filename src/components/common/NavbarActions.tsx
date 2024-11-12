@@ -2,7 +2,7 @@
 import { useAccount } from "wagmi";
 import SwitchChainButton from "./SwitchChainButton";
 import UserAvatarMenu from "./UserAvatarMenu";
-import { ConnectorButton } from "./ConnectWallet";
+import { ConnectorButton } from "./ConnectorButton";
 
 const NavbarActions = () => {
   const { isConnected } = useAccount();

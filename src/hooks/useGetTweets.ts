@@ -1,6 +1,6 @@
 "use client";
 import { TWITTER_ABI } from "@/abi/TwitterAbi";
-import { getEthNetworkId } from "@/lib/utils";
+import { getRequiredEthChain } from "@/lib/utils";
 import {
   QUERY_KEYS_FROM_LOCALSTORAGE,
   TWITTER_CONTRACT_ADDRESS,
@@ -20,7 +20,7 @@ export const useGetTweets = () => {
     address: TWITTER_CONTRACT_ADDRESS,
     abi: TWITTER_ABI,
     functionName: "getAllTweets",
-    chainId: getEthNetworkId(),
+    chainId: getRequiredEthChain().id,
   });
   const { setItem } = useLocalStorage();
   console.log("useGetTweets hook called", rawTweets);

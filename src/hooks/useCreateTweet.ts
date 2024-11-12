@@ -7,7 +7,7 @@ import { useCallback, useState } from "react";
 import { useAccount, useWriteContract } from "wagmi";
 import { QueryKey, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
-import { getEthNetworkId } from "@/lib/utils";
+import { getRequiredEthChain } from "@/lib/utils";
 import { waitForTransactionReceipt } from "@wagmi/core";
 import { type WriteContractErrorType } from "@wagmi/core";
 import { type WaitForTransactionReceiptErrorType } from "@wagmi/core";
@@ -17,7 +17,8 @@ import useLocalStorage from "./useLocalStorage";
 const useCreateTweet = () => {
   const [isPending, setIsPending] = useState(false);
   const { isConnected, chainId: selectedChainId } = useAccount();
-  const requiredChainId = getEthNetworkId();
+  const { id: requiredChainId, name: requiredChainName } =
+    getRequiredEthChain();
   const isCorrectChain = selectedChainId === requiredChainId;
   const { getItem } = useLocalStorage();
   const queryClient = useQueryClient();
@@ -35,7 +36,7 @@ const useCreateTweet = () => {
         return { success };
       }
       if (!isCorrectChain) {
-        toast.error("Switch chain to sepolia", {
+        toast.error(`Switch chain to ${requiredChainName}`, {
           position: "bottom-right",
           duration: 5000,
         });
@@ -88,6 +89,7 @@ const useCreateTweet = () => {
       writeContractAsync,
       queryClient,
       requiredChainId,
+      requiredChainName,
     ]
   );
 

@@ -1,4 +1,4 @@
-import { getEthNetworkId } from "@/lib/utils";
+import { getRequiredEthChain } from "@/lib/utils";
 import { useCallback, useState } from "react";
 import toast from "react-hot-toast";
 import { Connector, CreateConnectorFn, useAccount, useConnect } from "wagmi";
@@ -15,7 +15,7 @@ const useConnectToWallet = (
       if (!isConnected) {
         await connectAsync({
           connector,
-          chainId: getEthNetworkId(), // this will ask the user to switch the chain after wallet is connected
+          chainId: getRequiredEthChain().id, // this will ask the user to switch the chain after wallet is connected
         });
         toast.success("Wallet Connected!", {
           position: "bottom-right",
