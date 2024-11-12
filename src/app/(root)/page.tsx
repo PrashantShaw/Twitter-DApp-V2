@@ -1,6 +1,6 @@
 /**
  TODO: 
- 2. add switch account btn beside disconnect button (when connected)
+ 3. complete solidity video and add some more features
 */
 import Tweets from "@/app/(root)/_components/Tweets";
 import { Toaster } from "react-hot-toast";
