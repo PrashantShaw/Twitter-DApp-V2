@@ -1,10 +1,6 @@
 "use client";
-import { TWITTER_ABI } from "@/abi/TwitterAbi";
 import { getRequiredEthChain } from "@/lib/utils";
-import {
-  QUERY_KEYS_FROM_LOCALSTORAGE,
-  TWITTER_CONTRACT_ADDRESS,
-} from "@/utils/constants";
+import { LOCALSTORAGE_KEYS, TWITTER_CONTRACT_CONFIG } from "@/utils/constants";
 import { Tweet } from "@/utils/definitions";
 import { useCallback, useMemo } from "react";
 import { useReadContract } from "wagmi";
@@ -17,10 +13,11 @@ export const useGetTweets = () => {
     error,
     queryKey,
   } = useReadContract({
-    address: TWITTER_CONTRACT_ADDRESS,
-    abi: TWITTER_ABI,
+    address: TWITTER_CONTRACT_CONFIG.address,
+    abi: TWITTER_CONTRACT_CONFIG.abi,
     functionName: "getAllTweets",
     chainId: getRequiredEthChain().id,
+    query: { enabled: true }, // optionally control the fetch whenever this hook is called
   });
   const { setItem } = useLocalStorage();
   console.log("useGetTweets hook called", rawTweets);
@@ -55,7 +52,7 @@ export const useGetTweets = () => {
       return acc;
     }, []);
 
-    setItem(QUERY_KEYS_FROM_LOCALSTORAGE.getAllTweets, queryKey);
+    setItem(LOCALSTORAGE_KEYS.getAllTweetsQueryKey, queryKey);
     return newTweetsFirst;
   }, [rawTweets, parseTweet, queryKey, setItem]);
   return { tweets, isPending, error, queryKey };

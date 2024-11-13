@@ -1,8 +1,5 @@
 "use client";
-import {
-  QUERY_KEYS_FROM_LOCALSTORAGE,
-  TWITTER_CONTRACT_CONFIG,
-} from "@/utils/constants";
+import { LOCALSTORAGE_KEYS, TWITTER_CONTRACT_CONFIG } from "@/utils/constants";
 import { useCallback, useState } from "react";
 import { useAccount, useWriteContract } from "wagmi";
 import { QueryKey, useQueryClient } from "@tanstack/react-query";
@@ -57,7 +54,7 @@ const useCreateTweet = () => {
           chainId: requiredChainId,
         });
         const getAllTweetsQueryKey: QueryKey | undefined = getItem(
-          QUERY_KEYS_FROM_LOCALSTORAGE.getAllTweets
+          LOCALSTORAGE_KEYS.getAllTweetsQueryKey
         );
         queryClient.invalidateQueries({ queryKey: getAllTweetsQueryKey });
         // optionally, u can fetch event which is emitted when tweet is created using 'useWatchContractEvent' hook

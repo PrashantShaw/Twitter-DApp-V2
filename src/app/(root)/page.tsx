@@ -6,7 +6,6 @@
 */
 import Tweets from "@/app/(root)/_components/Tweets";
 import { Toaster } from "react-hot-toast";
-import CreateTweet from "./_components/CreateTweet";
 import Navbar from "@/components/common/Navbar";
 import Hero from "./_components/Hero";
 

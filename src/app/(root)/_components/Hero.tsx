@@ -3,18 +3,22 @@ import React from "react";
 import CreateTweet from "./CreateTweet";
 import { useAccount } from "wagmi";
 import RegisterButton from "./RegisterButton";
+import { useProfile } from "@/hooks/useProfile";
 
 const Hero = () => {
   const { isConnected } = useAccount();
-  const isRegistered = false;
-  const username = "shawPrash007";
+  const { userProfile, isPending, error, isRegistered } =
+    useProfile(isConnected);
+
+  console.log("Hero ::::", userProfile, isPending, error, isRegistered);
   return (
     <div className="flex flex-col items-center justify-center">
       {isConnected && !isRegistered ? <RegisterButton /> : null}
       {isConnected && isRegistered ? (
         <>
           <p>
-            Welcome <span className="font-semibold">{username}</span> 🎉
+            Welcome{" "}
+            <span className="font-semibold">{userProfile?.displayName}</span> 🎉
           </p>
           <CreateTweet />
         </>

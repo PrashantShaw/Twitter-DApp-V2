@@ -13,16 +13,16 @@ export const PROFILE_CONTRACT_ADDRESS = process.env
 export const TWITTER_CONTRACT_CONFIG = {
   address: TWITTER_CONTRACT_ADDRESS,
   abi: TWITTER_ABI,
-};
+} as const;
 
 export const PROFILE_CONTRACT_CONFIG = {
   address: PROFILE_CONTRACT_ADDRESS,
   abi: PROFILE_ABI,
-};
+} as const;
 
-// these query keys stored at local storage are used to invalidate the fetch result cached by the tanstack-react-query
-export const QUERY_KEYS_FROM_LOCALSTORAGE = {
-  getAllTweets: "queryKey__getAllTweets",
+export const LOCALSTORAGE_KEYS = {
+  isUserRegistered: "isUserRegistered",
+  getAllTweetsQueryKey: "getAllTweetsQueryKey",
 } as const;
 
 export const ETH_CHAINS = {
