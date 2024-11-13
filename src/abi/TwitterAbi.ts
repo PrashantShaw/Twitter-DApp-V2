@@ -1,18 +1,19 @@
 export const TWITTER_ABI = [
   {
-    inputs: [],
+    inputs: [
+      {
+        internalType: "address",
+        name: "_profileContractAddress",
+        type: "address",
+      },
+    ],
     stateMutability: "nonpayable",
     type: "constructor",
   },
   {
     anonymous: false,
     inputs: [
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "id",
-        type: "uint256",
-      },
+      { indexed: false, internalType: "uint256", name: "id", type: "uint256" },
       {
         indexed: false,
         internalType: "address",
@@ -100,12 +101,7 @@ export const TWITTER_ABI = [
   {
     anonymous: false,
     inputs: [
-      {
-        indexed: false,
-        internalType: "uint256",
-        name: "id",
-        type: "uint256",
-      },
+      { indexed: false, internalType: "uint256", name: "id", type: "uint256" },
       {
         indexed: false,
         internalType: "string",
@@ -123,13 +119,7 @@ export const TWITTER_ABI = [
     type: "event",
   },
   {
-    inputs: [
-      {
-        internalType: "string",
-        name: "_tweet",
-        type: "string",
-      },
-    ],
+    inputs: [{ internalType: "string", name: "_tweet", type: "string" }],
     name: "createTweet",
     outputs: [],
     stateMutability: "nonpayable",
@@ -141,31 +131,11 @@ export const TWITTER_ABI = [
     outputs: [
       {
         components: [
-          {
-            internalType: "uint256",
-            name: "id",
-            type: "uint256",
-          },
-          {
-            internalType: "address",
-            name: "author",
-            type: "address",
-          },
-          {
-            internalType: "string",
-            name: "content",
-            type: "string",
-          },
-          {
-            internalType: "uint256",
-            name: "timestamp",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "likes",
-            type: "uint256",
-          },
+          { internalType: "uint256", name: "id", type: "uint256" },
+          { internalType: "address", name: "author", type: "address" },
+          { internalType: "string", name: "content", type: "string" },
+          { internalType: "uint256", name: "timestamp", type: "uint256" },
+          { internalType: "uint256", name: "likes", type: "uint256" },
         ],
         internalType: "struct Twitter.Tweet[]",
         name: "",
@@ -177,41 +147,17 @@ export const TWITTER_ABI = [
   },
   {
     inputs: [
-      {
-        internalType: "address",
-        name: "_creatorAddress",
-        type: "address",
-      },
+      { internalType: "address", name: "_creatorAddress", type: "address" },
     ],
     name: "getTweetsByAddress",
     outputs: [
       {
         components: [
-          {
-            internalType: "uint256",
-            name: "id",
-            type: "uint256",
-          },
-          {
-            internalType: "address",
-            name: "author",
-            type: "address",
-          },
-          {
-            internalType: "string",
-            name: "content",
-            type: "string",
-          },
-          {
-            internalType: "uint256",
-            name: "timestamp",
-            type: "uint256",
-          },
-          {
-            internalType: "uint256",
-            name: "likes",
-            type: "uint256",
-          },
+          { internalType: "uint256", name: "id", type: "uint256" },
+          { internalType: "address", name: "author", type: "address" },
+          { internalType: "string", name: "content", type: "string" },
+          { internalType: "uint256", name: "timestamp", type: "uint256" },
+          { internalType: "uint256", name: "likes", type: "uint256" },
         ],
         internalType: "struct Twitter.Tweet[]",
         name: "",
@@ -223,16 +169,8 @@ export const TWITTER_ABI = [
   },
   {
     inputs: [
-      {
-        internalType: "address",
-        name: "_author",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "_tweetId",
-        type: "uint256",
-      },
+      { internalType: "address", name: "_author", type: "address" },
+      { internalType: "uint256", name: "_tweetId", type: "uint256" },
     ],
     name: "likeTweet",
     outputs: [],
@@ -241,60 +179,24 @@ export const TWITTER_ABI = [
   },
   {
     inputs: [
-      {
-        internalType: "address",
-        name: "",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
+      { internalType: "address", name: "", type: "address" },
+      { internalType: "uint256", name: "", type: "uint256" },
     ],
     name: "tweets",
     outputs: [
-      {
-        internalType: "uint256",
-        name: "id",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "author",
-        type: "address",
-      },
-      {
-        internalType: "string",
-        name: "content",
-        type: "string",
-      },
-      {
-        internalType: "uint256",
-        name: "timestamp",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "likes",
-        type: "uint256",
-      },
+      { internalType: "uint256", name: "id", type: "uint256" },
+      { internalType: "address", name: "author", type: "address" },
+      { internalType: "string", name: "content", type: "string" },
+      { internalType: "uint256", name: "timestamp", type: "uint256" },
+      { internalType: "uint256", name: "likes", type: "uint256" },
     ],
     stateMutability: "view",
     type: "function",
   },
   {
     inputs: [
-      {
-        internalType: "address",
-        name: "_author",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "_tweetId",
-        type: "uint256",
-      },
+      { internalType: "address", name: "_author", type: "address" },
+      { internalType: "uint256", name: "_tweetId", type: "uint256" },
     ],
     name: "unlikeTweet",
     outputs: [],
@@ -303,16 +205,8 @@ export const TWITTER_ABI = [
   },
   {
     inputs: [
-      {
-        internalType: "string",
-        name: "_updatedTweet",
-        type: "string",
-      },
-      {
-        internalType: "uint256",
-        name: "_tweetId",
-        type: "uint256",
-      },
+      { internalType: "string", name: "_updatedTweet", type: "string" },
+      { internalType: "uint256", name: "_tweetId", type: "uint256" },
     ],
     name: "updateTweet",
     outputs: [],
