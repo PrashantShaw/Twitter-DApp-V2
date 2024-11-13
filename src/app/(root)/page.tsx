@@ -1,11 +1,14 @@
 /**
  TODO: 
- 3. complete solidity video and add some more features
+ 1. complete solidity video and add some more features
+ 2. register user when user tries to interact
+ 3. redeploy contracts to sepolia and add the abis
 */
 import Tweets from "@/app/(root)/_components/Tweets";
 import { Toaster } from "react-hot-toast";
 import CreateTweet from "./_components/CreateTweet";
 import Navbar from "@/components/common/Navbar";
+import Hero from "./_components/Hero";
 
 function App() {
   return (
@@ -15,7 +18,7 @@ function App() {
         <h1 className="font-bold text-3xl text-center py-7">
           Twitter Wagmi DApp
         </h1>
-        <CreateTweet />
+        <Hero />
         <Tweets />
         <Toaster />
       </div>

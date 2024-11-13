@@ -24,7 +24,7 @@ const CreateTweet = () => {
   );
 
   return (
-    <div className="pt-6 pb-2">
+    <div className="pt-6 pb-2 w-full">
       <form ref={formRef} onSubmit={onSubmit}>
         <div className="flex flex-col gap-3">
           <Textarea name="tweet" placeholder="What's on your mind?" rows={6} />

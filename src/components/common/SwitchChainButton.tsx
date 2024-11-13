@@ -1,7 +1,7 @@
 "use client";
 import { getRequiredEthChain } from "@/lib/utils";
 import { Button } from "../ui/button";
-import { ArrowDownUp, CheckCheck } from "lucide-react";
+import { CheckCheck, ChevronsUpDown } from "lucide-react";
 import { useAccount, useSwitchChain } from "wagmi";
 
 const SwitchChainButton = () => {
@@ -18,7 +18,7 @@ const SwitchChainButton = () => {
         </Button>
       ) : (
         <Button onClick={() => switchChain({ chainId: requiredChain.id })}>
-          <ArrowDownUp className="text-amber-400" />
+          <ChevronsUpDown className="text-amber-400" />
           Switch to {requiredChain.name}
         </Button>
       )}

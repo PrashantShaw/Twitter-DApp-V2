@@ -2,8 +2,20 @@
 
 pragma solidity >=0.8.2 <0.9.0;
 
+// interface of Profile contract, which will be called from this Twitter contract
+interface IProfile {
+    struct UserProfile {
+        string displayName;
+        string bio;
+    }
+
+    function getProfile(
+        address _user
+    ) external view returns (UserProfile memory);
+}
+
 contract Twitter {
-    address owner;
+    IProfile profileContract;
     uint16 constant MAX_TWEET_LENGTH = 280;
     struct Tweet {
         uint256 id;
@@ -15,10 +27,6 @@ contract Twitter {
 
     mapping(address => Tweet[]) public tweets;
     address[] authors;
-
-    constructor() {
-        owner = msg.sender;
-    }
 
     event TweetCreated(
         uint256 id,
@@ -40,17 +48,19 @@ contract Twitter {
         uint256 newLikeCount
     );
 
-    modifier hasPermission(address _caller, uint256 _tweetId) {
-        Tweet[] memory callerTweets = tweets[_caller];
-
-        // here, the tweet id is always less than the no. of tweets
-        require(_tweetId < callerTweets.length, "Tweet doesn't exist!");
-        require(callerTweets[_tweetId].id == _tweetId, "Tweet doesn't exist!");
+    modifier onlyRegister() {
+        IProfile.UserProfile memory userProfileTemp = profileContract
+            .getProfile(msg.sender);
         require(
-            callerTweets[_tweetId].author == _caller,
-            "Not the Author of the Tweet."
+            bytes(userProfileTemp.displayName).length > 0,
+            "USER NOT REGISTERED!!"
         );
         _;
+    }
+
+    // passing owner to base constructor
+    constructor(address _profileContractAddress) {
+        profileContract = IProfile(_profileContractAddress); // link Profile contract when this contract is deployed
     }
 
     function getAllTweets() public view returns (Tweet[] memory) {
@@ -77,7 +87,7 @@ contract Twitter {
         return tweets[_creatorAddress];
     }
 
-    function createTweet(string memory _tweet) public {
+    function createTweet(string memory _tweet) public onlyRegister {
         require(
             bytes(_tweet).length < MAX_TWEET_LENGTH,
             "This tweet is too long!"
@@ -108,7 +118,7 @@ contract Twitter {
     function updateTweet(
         string memory _updatedTweet,
         uint256 _tweetId
-    ) public hasPermission(msg.sender, _tweetId) {
+    ) public onlyRegister {
         Tweet[] storage userTweets = tweets[msg.sender];
         string memory oldContent = userTweets[_tweetId].content;
         userTweets[_tweetId].content = _updatedTweet;
@@ -116,7 +126,10 @@ contract Twitter {
         emit TweetUpdated(_tweetId, oldContent, userTweets[_tweetId].content);
     }
 
-    function likeTweet(address _author, uint256 _tweetId) external {
+    function likeTweet(
+        address _author,
+        uint256 _tweetId
+    ) external onlyRegister {
         Tweet[] storage userTweets = tweets[_author];
         // here, the tweet id is always less than the no. of tweets
         require(_tweetId < userTweets.length, "Tweet doesn't exist!");
@@ -132,7 +145,10 @@ contract Twitter {
         );
     }
 
-    function unlikeTweet(address _author, uint256 _tweetId) external {
+    function unlikeTweet(
+        address _author,
+        uint256 _tweetId
+    ) external onlyRegister {
         Tweet[] storage userTweets = tweets[_author];
         // here, the tweet id is always less than the no. of tweets
         require(_tweetId < userTweets.length, "Tweet doesn't exist!");
