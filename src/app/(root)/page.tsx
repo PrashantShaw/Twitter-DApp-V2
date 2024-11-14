@@ -1,8 +1,7 @@
 /**
  TODO: 
- 1. complete solidity video and add some more features ✅
  2. register user when user tries to interact
- 3. redeploy contracts to sepolia and add the abis ✅
+ 3. implement delete tweet functionality if possible.
 */
 import Tweets from "@/app/(root)/_components/Tweets";
 import { Toaster } from "react-hot-toast";

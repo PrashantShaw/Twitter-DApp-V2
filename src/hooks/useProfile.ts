@@ -28,7 +28,7 @@ export const useProfile = (enableFetch = false) => {
 
     setItem(LOCALSTORAGE_KEYS.isUserRegistered, isUserRegistered);
     return isUserRegistered;
-  }, [userProfile]);
+  }, [userProfile, setItem]);
 
   const registerUser = useCallback(async (displayName: string, bio: string) => {
     // TODO: implement this method
