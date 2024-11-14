@@ -12,31 +12,44 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useProfile } from "@/hooks/useProfile";
-import { FormEvent, useCallback } from "react";
+import { FormEvent, useCallback, useState } from "react";
+import toast from "react-hot-toast";
 
 const RegisterButton = () => {
-  const { userProfile, isPending, error, isRegistered, registerUser } =
-    useProfile();
-  console.log(
-    "RegisterButton ::::",
-    userProfile,
-    isPending,
-    error,
-    isRegistered
+  const [isOpen, setIsOpen] = useState(false);
+  const { registerUser, isRegisteringUser } = useProfile();
+
+  const handleRegisterUser = useCallback(
+    (e: FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      const form = e.currentTarget;
+      const formData = new FormData(form);
+      const parsedFormData = Object.fromEntries(formData.entries()) as {
+        displayname: string;
+        bio: string;
+      };
+
+      if (
+        parsedFormData.displayname.toString().length < 3 ||
+        parsedFormData.bio.toString().length < 3
+      ) {
+        toast.error("Invalid Inputs: minimum 3 characters required!", {
+          position: "bottom-right",
+          duration: 5000,
+        });
+        return;
+      }
+
+      (async () => {
+        await registerUser(parsedFormData.displayname, parsedFormData.bio);
+        setIsOpen(false);
+      })().catch(() => {});
+    },
+    [registerUser]
   );
-  const handleRegisterUser = useCallback((e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const form = e.currentTarget;
-    const formData = new FormData(form);
-    const parsedFormData = Object.fromEntries(formData.entries());
-
-    console.log("Register form data :: ", parsedFormData);
-
-    // TODO: validate the form data and call registerUser function here
-  }, []);
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={(open) => setIsOpen(open)}>
       <DialogTrigger asChild>
         <Button variant="default">Register</Button>
       </DialogTrigger>
@@ -73,7 +86,13 @@ const RegisterButton = () => {
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit">Save changes</Button>
+            <Button
+              type="submit"
+              disabled={isRegisteringUser}
+              className="w-[8rem]"
+            >
+              {isRegisteringUser ? "Registering..." : "Submit"}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

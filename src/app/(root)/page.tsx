@@ -1,6 +1,5 @@
 /**
  TODO: 
- 2. register user when user tries to interact
  3. implement delete tweet functionality if possible.
 */
 import Tweets from "@/app/(root)/_components/Tweets";

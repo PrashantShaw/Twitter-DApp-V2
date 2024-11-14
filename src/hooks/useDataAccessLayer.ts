@@ -25,5 +25,13 @@ export const useDataAccessLayer = () => {
     }
   }, [isConnected, isCorrectChain, requiredChainName, getItem]);
 
-  return { verifyAllChecks };
+  const verifyConnectionAndChain = useCallback(() => {
+    if (!isConnected) {
+      throw new Error("Wallet not connected!");
+    } else if (!isCorrectChain) {
+      throw new Error(`Switch chain to ${requiredChainName}`);
+    }
+  }, [isConnected, isCorrectChain, requiredChainName]);
+
+  return { verifyAllChecks, verifyConnectionAndChain };
 };

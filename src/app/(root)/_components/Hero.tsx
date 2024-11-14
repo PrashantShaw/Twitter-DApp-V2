@@ -7,10 +7,8 @@ import { useProfile } from "@/hooks/useProfile";
 
 const Hero = () => {
   const { isConnected } = useAccount();
-  const { userProfile, isPending, error, isRegistered } =
-    useProfile(isConnected);
+  const { userProfile, isRegistered } = useProfile(isConnected);
 
-  console.log("Hero ::::", userProfile, isPending, error, isRegistered);
   return (
     <div className="flex flex-col items-center justify-center">
       {isConnected && !isRegistered ? <RegisterButton /> : null}
