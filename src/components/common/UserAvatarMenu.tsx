@@ -10,7 +10,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { useAccount, useDisconnect } from "wagmi";
 import { shortedAccountAddress } from "@/lib/utils";
-import { ArrowRightLeft, Check, Diff, Unplug, User } from "lucide-react";
+import { Check, Diff, Unplug, User } from "lucide-react";
 import useConnectToWallet from "@/hooks/useConnectToWallet";
 
 const UserAvatarMenu = () => {

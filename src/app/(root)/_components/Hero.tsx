@@ -18,6 +18,7 @@ const Hero = () => {
             Welcome{" "}
             <span className="font-semibold">{userProfile?.displayName}</span> 🎉
           </p>
+          <p className="text-sm text-slate-500">{userProfile?.bio}</p>
           <CreateTweet />
         </>
       ) : null}
