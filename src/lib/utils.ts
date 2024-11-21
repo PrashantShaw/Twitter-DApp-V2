@@ -1,5 +1,5 @@
 import { ETH_CHAINS } from "@/utils/constants";
-import { ETH_NETWORKS } from "@/utils/definitions";
+import { ETH_NETWORKS, RawTweet, Tweet } from "@/utils/definitions";
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 
@@ -28,3 +28,11 @@ export const getRequiredEthChain = () => {
 
   return ETH_CHAINS[ETH_NETWORK];
 };
+
+export const parseTweet = (tweet: RawTweet): Tweet => ({
+  id: tweet.id.toString(),
+  author: tweet.author,
+  content: tweet.content,
+  timestamp: new Date(Number(tweet.timestamp) * 1000),
+  likes: tweet.likes.toString(),
+});

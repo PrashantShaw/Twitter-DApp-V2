@@ -1,8 +1,8 @@
 "use client";
-import { getRequiredEthChain } from "@/lib/utils";
+import { getRequiredEthChain, parseTweet } from "@/lib/utils";
 import { LOCALSTORAGE_KEYS, TWITTER_CONTRACT_CONFIG } from "@/utils/constants";
-import { Tweet } from "@/utils/definitions";
-import { useCallback, useMemo } from "react";
+import { RawTweet, Tweet } from "@/utils/definitions";
+import { useMemo } from "react";
 import { useReadContract } from "wagmi";
 import useLocalStorage from "./useLocalStorage";
 
@@ -21,21 +21,7 @@ export const useGetTweets = () => {
   });
   const { setItem } = useLocalStorage();
   console.log("useGetTweets hook called", rawTweets);
-  type RawTweet =
-    Exclude<typeof rawTweets, undefined> extends readonly (infer U)[]
-      ? U
-      : never;
 
-  const parseTweet = useCallback(
-    (tweet: RawTweet): Tweet => ({
-      id: tweet.id.toString(),
-      author: tweet.author,
-      content: tweet.content,
-      timestamp: new Date(Number(tweet.timestamp) * 1000),
-      likes: tweet.likes.toString(),
-    }),
-    []
-  );
   const tweets = useMemo(() => {
     if (!rawTweets) return [];
 
@@ -54,6 +40,6 @@ export const useGetTweets = () => {
 
     setItem(LOCALSTORAGE_KEYS.getAllTweetsQueryKey, queryKey);
     return newTweetsFirst;
-  }, [rawTweets, parseTweet, queryKey, setItem]);
+  }, [rawTweets, queryKey, setItem]);
   return { tweets, isPending, error, queryKey };
 };

@@ -12,6 +12,7 @@ import { type WaitForTransactionReceiptErrorType } from "@wagmi/core";
 import { getConfig } from "@/wagmi";
 import useLocalStorage from "./useLocalStorage";
 import { useDataAccessLayer } from "./useDataAccessLayer";
+import { RawTweet } from "@/utils/definitions";
 
 const useLikeTweet = () => {
   const [isPending, setIsPending] = useState(false);
@@ -38,10 +39,28 @@ const useLikeTweet = () => {
           hash,
           chainId: requiredChainId,
         });
+        // TODO: update tanstack-query state after mutation in all other places just like the below one.
         const getAllTweetsQueryKey: QueryKey | undefined = getItem(
           LOCALSTORAGE_KEYS.getAllTweetsQueryKey
         );
-        queryClient.invalidateQueries({ queryKey: getAllTweetsQueryKey });
+        queryClient.setQueryData(
+          getAllTweetsQueryKey!,
+          (prevTweets: RawTweet[]) => {
+            const updatedTweets = prevTweets.map((t) => {
+              const shouldUpdateThisTweet =
+                t.author === author && String(t.id) == id;
+              return shouldUpdateThisTweet
+                ? {
+                    ...t,
+                    likes: t.likes + BigInt(1),
+                  }
+                : t;
+            });
+            // console.log("updatedTweets :::::", updatedTweets);
+            return updatedTweets;
+          }
+        );
+        // queryClient.invalidateQueries({ queryKey: getAllTweetsQueryKey });
         // optionally, u can fetch event which is emitted when tweet is liked using 'useWatchContractEvent' hook
         toast.success("Tweet Liked!", {
           position: "bottom-center",
